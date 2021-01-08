@@ -1,4 +1,4 @@
-#pragma on
+#pragma once
 #include <Arduino.h>
 #define COMMON_CATHODE 1 
 #define COMMON_ANODE 0
