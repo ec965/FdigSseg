@@ -66,7 +66,9 @@ Entire strings can be displayed at a time using `display_string()`.
 This funciton must be used with the hardware timer.
 The next section goes over how to configure the display for use with the hardware timer.
 
-### Usage with Hardware Timer
+## Usage with Hardware Timer
+Full example code can be found in the examples folder as [esp32_seg.ino](examples/esp32_seg/esp32_seg.ino).
+
 TLDR:
 1. Set up a timer.
 2. Create a display task to run the display. Suspend the display task based on the timer interrupt.
@@ -195,7 +197,7 @@ void loop(){
 }
 ```
 
-A full example can be found in the examples folder.
+Full example code can be found in the examples folder as [esp32_seg.ino](examples/esp32_seg/esp32_seg.ino).
 
 ## Single Digit 7 Segment Display
 While the library is made for a four digit seven segment display, a one digit seven segment display can also be used by only have one pin number in the digits array.
