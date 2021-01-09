@@ -43,8 +43,14 @@ for(int i=1; i<5; i++){
 
 Individual segments can also be addressed with `segment_on(<segment number>)`. 
 Segments are indexed from 0 to 7. 
-The 'A' segement corresponds with index 0. 
-The 'B' segment corresponds with index 1 (etc.). 
+* The 'A' segment corresponds with index 0.
+* The 'B' segment corresponds with index 1.
+* The 'C' segment corresponds with index 2.
+* The 'D' segment corresponds with index 3.
+* The 'E' segment corresponds with index 4.
+* The 'F' segment corresponds with index 5.
+* The 'G' segment corresponds with index 6.
+
 For example, turning on the 'A' segment on the first digit, then turning it off after 1 sec:
 ```C++
 segdisplay.d(0);
@@ -209,3 +215,9 @@ FdigSseg segdisp (digit_pin, seg_pins, COMMON_ANODE);
 
 ## Multi Digit 7 Segment Display
 This library can be used with multiple 7 segment displays as long as all digit pins are defined and all segment pins are connected together.
+Using multiple digits with the 7 segment display may require a faster refresh rate on the hardware timer.
+```C++
+const uint8_t digit_pin[] = {1,2,3,6,7,26}; // multiple seven segment displays connected together
+const uint8_t seg_pins[] = {21, 19, 18, 5, 17, 16, 4, 15}; // segments
+FdigSseg segdisp (digit_pin, seg_pins, COMMON_ANODE);
+```
