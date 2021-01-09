@@ -1,6 +1,8 @@
 # Four Digit Seven Segment Library (ESP32)
 ![4dig7seg](https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.learningaboutelectronics.com%2Fimages%2F4-digit-7-segment-LED-display-pinout.png&f=1&nofb=1)
 
+![7seg](https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.circuitbasics.com%2Fwp-content%2Fuploads%2F2017%2F05%2FArduino-7-Segment-Display-Tutorial-Segment-Layout-Diagram.png&f=1&nofb=1)
+
 A library for interfacing with a seven segment display using an ESP32 and the [Arduino ESP32 HAL](https://github.com/espressif/arduino-esp32).
 
 ## Supported Characters
@@ -8,15 +10,67 @@ A library for interfacing with a seven segment display using an ESP32 and the [A
 * __Letters:__ a, c, f, h
 * __Punctuation:__ - (dash), . (period)
 
-## Usage
+## General Usage
+You can intialize the `FdigSseg` object with the digit pins, segment pins, and either `COMMON_ANODE` or `COMMON_CATHODE` macros.
+For example:
+```C++
+const uint8_t digits[] = {1,2,3,4};
+const uint8_t segments[] = {5,6,7,8,9,10,11,12};
+
+FdigSseg segdisplay(digits, segments, COMMON_ANODE);
+```
+
+Digits can be addressed using `d(<digit number>)`.
+Digits start at index 0 and go to 3.
+For example, to set the first digit to show '1':
+```C++
+segdisplay.d(0);
+segdisplay.s('1');
+```
+
+All digits can be turned off using `d_clear()` and turned on using `d_all()`.
+
+Characters can be shown per segment.
+See above for a list of supported characters.
+For example, counting up from 1 to 4 on the first digit:
+```C++
+segdisplay.d(0);
+for(int i=1; i<5; i++){
+    segdisplay.s(i + '0'); // convert int to character
+    delay(1000);
+}
+```
+
+Individual segments can also be addressed with `segment_on(<segment number>)`. 
+Segments are indexed from 0 to 7. 
+The 'A' segement corresponds with index 0. 
+The 'B' segment corresponds with index 1 (etc.). 
+For example, turning on the 'A' segment on the first digit, then turning it off after 1 sec:
+```C++
+segdisplay.d(0);
+segdisplay.segment_on(0);
+delay(1000);
+segdisplay.segment_off(0);
+```
+
+The dot/period is also individually addressable. 
+For example, to turn on the dot on the first digit, then turn it off after 1 sec:
+```C++
+segdisplay.d(0);
+segdisplay.s_dot_on();
+delay(1000);
+segdisplay.s_dot_off();
+```
+
+Entire strings can be displayed at a time using `display_string()`.
+This funciton must be used with the hardware timer.
+The next section goes over how to configure the display for use with the hardware timer.
+
+### Usage with Hardware Timer
 TLDR:
 1. Set up a timer.
 2. Create a display task to run the display. Suspend the display task based on the timer interrupt.
 3. Create a queue to send strings to the display task.
-
-
-The library can support both common annode and common cathode displays.
-The option can be chosen with the `COMMON_ANNODE` and `COMMON_CATHODE` macros when creating the `FDigSSeg` object.
 
 To display different numbers on each digit, the display switches at a high speed between digits to fool the human eye.
 A timer is needed to set the switching (i.e. refresh rate) of the display.
@@ -150,3 +204,6 @@ const uint8_t digit_pin[] = {26}; // single digit display
 const uint8_t seg_pins[] = {21, 19, 18, 5, 17, 16, 4, 15}; // segments
 FdigSseg segdisp (digit_pin, seg_pins, COMMON_ANODE);
 ```
+
+## Multi Digit 7 Segment Display
+This library can be used with multiple 7 segment displays as long as all digit pins are defined and all segment pins are connected together.
